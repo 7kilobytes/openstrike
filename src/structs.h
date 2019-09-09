@@ -17,4 +17,10 @@ struct game_t {
      struct state_manager_t statemanager;
 };
 
+struct entity_t {
+     int x;
+     int y;
+     SDL_Texture *texture;
+};
+
 #endif
