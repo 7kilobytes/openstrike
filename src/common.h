@@ -10,6 +10,7 @@
 #include "init.h"
 #include "input.h"
 #include "draw.h"
+#include "isometrics.h"
 
 
 struct game_t game;

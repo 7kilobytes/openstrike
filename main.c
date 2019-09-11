@@ -7,6 +7,9 @@ unsigned draw_state_1(float deltatime)
 
 static void capFrameRate(long *then, float *remainder);
 
+#define MAP_SIZE 16
+/* int test_map */
+
 int main(void)
 {
      long then;
@@ -25,6 +28,7 @@ int main(void)
      state_1.update = update_state;
      state_1.draw = draw_state_1;
      state_1.destroy = destroy_state;
+
      STATEMANAGER_push(&game.statemanager, &state_1);
 
      initSDL();
@@ -32,19 +36,37 @@ int main(void)
      then = SDL_GetTicks();
      remainder = 0;
 
-     printf("%f\n", then);
-
      struct entity_t unit = {0};
      unit.x = 100;
      unit.y = 100;
      unit.texture = loadTexture("data/unit.png");
+
+     struct entity_t tile;
+     tile.x = 0;
+     tile.y = 0;
+     tile.texture = loadTexture("data/tiles.png");
 
      while(!game.quit) {
           prepareScene();
           STATEMANAGER_update(&game.statemanager, 5.0f);
           updateInput();
           STATEMANAGER_draw(&game.statemanager, 5.0f);
-          renderTexture(unit.texture, unit.x, unit.y);
+
+          for(int i = 0; i < 4; i++) {
+               for(int j = 0; j < 4; j++) {
+                    tile.x = j * 64 + 200;
+                    tile.y = i * 64 - 100;
+
+                    int x = tile.x - tile.y;
+                    int y = (tile.x + tile.y) / 2;
+                    tile.x = x;
+                    tile.y = y;
+                    printf("x: %d, y: %d\n", tile.x, tile.y);
+                    renderTexture(tile.texture, tile.x, tile.y);
+               }
+          }
+
+          /* renderTexture(unit.texture, unit.x, unit.y); */
           presentScene();
           /* SDL_Delay(16); */
           capFrameRate(&then, &remainder);
